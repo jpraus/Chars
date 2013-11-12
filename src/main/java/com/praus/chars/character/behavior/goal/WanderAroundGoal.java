@@ -5,7 +5,7 @@
 package com.praus.chars.character.behavior.goal;
 
 import com.praus.chars.character.NonPlayerCharacter;
-import com.praus.chars.character.pathfinding.MoveOrder;
+import com.praus.chars.map.MoveOrder;
 
 /**
  *

@@ -5,9 +5,10 @@
 package com.praus.chars.character;
 
 import com.praus.chars.Globals;
-import com.praus.chars.character.pathfinding.MoveOrder;
+import com.praus.chars.map.MoveOrder;
 import com.praus.chars.clock.RoundClockListener;
 import com.praus.chars.map.Floor;
+import com.praus.chars.map.Location;
 
 /**
  *
@@ -19,8 +20,8 @@ public abstract class AbstractNonPlayerCharacter extends AbstractCharacter imple
 
     private boolean isAwake = false;
     
-    public AbstractNonPlayerCharacter(String name, long hitPoints, long mana, Floor floor, int column, int row) {
-        super(name, hitPoints, mana, floor, column, row);
+    public AbstractNonPlayerCharacter(String name, long hitPoints, long mana, Floor floor, Location location) {
+        super(name, hitPoints, mana, floor, location);
         wakeUp();
     }
 

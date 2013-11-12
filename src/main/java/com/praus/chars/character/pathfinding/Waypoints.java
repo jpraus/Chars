@@ -4,6 +4,9 @@
 
 package com.praus.chars.character.pathfinding;
 
+import com.praus.chars.map.MoveOrder;
+import com.praus.chars.map.Location;
+
 /**
  *
  * @author Jiří Praus <jpraus@kerio.com>
@@ -23,30 +26,29 @@ class Waypoints {
     }
     
     /**
-     * Find next waypoint from given current position, throws PathNotFollowedException
-     * if position is not on any waypoint
-     * TODO: could change also neighbours if current position not found on path.
+     * Find next waypoint from given current location, throws PathNotFollowedException
+     * if location is not on any waypoint
+     * TODO: could change also neighbours if current location not found on path.
      * 
-     * @param column current position column
-     * @param row current position row
+     * @param location current location
      * @return next move order to take to reach next waypoint
-     * @exception PathNotFollowedException if current position is not on any waypoint
+     * @exception PathNotFollowedException if current location is not on any waypoint
      */
-    public MoveOrder next(int column, int row) throws PathNotFollowedException {
+    public MoveOrder next(Location location) throws PathNotFollowedException {
         if (start == null) {
             return MoveOrder.NO; // end reached or no need to move at all
         }
         Waypoint current = start;
         int gone = 0;
         while (current != null) {
-            if (current.column == column && current.row == row) {
+            if (current.location.equals(location)) {
                 this.start = current; // path has been reached to here, we can remove old column
                 this.length -= gone; // path has shortened from now
 
                 if (current.next == null) {
                     return MoveOrder.NO; // no need to move at all
                 }
-                return new MoveOrder(current.next.column - column, current.next.row - row);
+                return location.moveTo(current.next.location);
             }
             gone ++;
             current = current.next;
@@ -56,20 +58,17 @@ class Waypoints {
     
     private class Waypoint {
 
-        private final int column;
-        private final int row;
-
+        private final Location location;
         private final Waypoint next; // path next waypoint to follow 
         
         private Waypoint(Node node, Waypoint next) {
-            this.column = node.getColumn();
-            this.row = node.getRow();
+            this.location = new Location(node.getColumn(), node.getRow());
             this.next = next;
         }
 
         @Override
         public String toString() {
-            return String.format("{Waypoint %d,%d}", column, row);
+            return String.format("{Waypoint %s}", location);
         }
     }
 

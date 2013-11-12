@@ -4,10 +4,10 @@
 
 package com.praus.chars.character;
 
-import com.googlecode.lanterna.terminal.TerminalPosition;
 import com.praus.chars.ListenerList;
-import com.praus.chars.character.pathfinding.MoveOrder;
+import com.praus.chars.map.MoveOrder;
 import com.praus.chars.map.Floor;
+import com.praus.chars.map.Location;
 
 /**
  *
@@ -23,15 +23,15 @@ public abstract class AbstractCharacter implements Character {
     private final Stat mana;
 
     private Floor floor;
-    private final TerminalPosition position;    
+    private final Location location;    
 
-    public AbstractCharacter(String name, long hitPoints, long mana, Floor floor, int column, int row) {
+    public AbstractCharacter(String name, long hitPoints, long mana, Floor floor, Location location) {
         this.name = name;
         this.hitPoints = new Stat(hitPoints, hitPoints);
         this.mana = new Stat(mana, mana);
 
         changeFloor(floor);
-        this.position = new TerminalPosition(column, row);
+        this.location = new Location(location);
     }
 
     @Override
@@ -54,8 +54,8 @@ public abstract class AbstractCharacter implements Character {
     }
 
     @Override
-    public TerminalPosition getPosition() {
-        return position;
+    public Location getLocation() {
+        return location;
     }
 
     @Override
@@ -69,14 +69,11 @@ public abstract class AbstractCharacter implements Character {
     }
     
     public boolean tryMove(MoveOrder order) {
-        int column = getPosition().getColumn() + order.getColumn();
-        int row = getPosition().getRow()+ order.getRow();
-        
-        if (getFloor().isBlocked(column, row)) {
+        Location future = getLocation().futureLocation(order);
+        if (getFloor().isBlocked(future)) {
             return false;
         }
-        this.getPosition().setColumn(column);
-        this.getPosition().setRow(row);        
+        this.getLocation().changeTo(future);     
         
         this.notifyListenersMoved();
         return true;

@@ -16,7 +16,7 @@ class Node implements Comparable<Node> {
     private boolean closed = false; // indicate that this node has been closed
 
 	/**
-	 * Create new A* alogirthm node with empty heuristic
+	 * Create new A* algorithm node with empty heuristic
 	 * 
 	 * @param column node column
 	 * @param row  node row
@@ -29,7 +29,7 @@ class Node implements Comparable<Node> {
 	}
 	
 	/**
-	 * Create new A* alogirthm node and calculate heuristic to target node
+	 * Create new A* algorithm node and calculate heuristic to target node
 	 * 
 	 * @param column node column
 	 * @param row node row

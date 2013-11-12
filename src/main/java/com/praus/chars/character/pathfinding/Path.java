@@ -1,7 +1,8 @@
 package com.praus.chars.character.pathfinding;
 
-import com.googlecode.lanterna.terminal.TerminalPosition;
+import com.praus.chars.map.MoveOrder;
 import com.praus.chars.character.Placeable;
+import com.praus.chars.map.Location;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -17,7 +18,7 @@ public class Path {
 	private final Placeable current;
 	private final Placeable target;
 	
-	private TerminalPosition lastTargetPosition = null;
+	private Location lastTargetLocation = null;
     
     private Waypoints path = null;
 
@@ -61,7 +62,7 @@ public class Path {
         if (path == null) {
             throw new UnreachableException();
         }
-        MoveOrder order = path.next(current.getPosition().getColumn(), current.getPosition().getRow());        
+        MoveOrder order = path.next(current.getLocation());        
         logger.debug("Next move {}", order);
         return order;        
     }
@@ -73,10 +74,10 @@ public class Path {
         else if (current.getFloor() != target.getFloor()) {
             computePath(); // floors has changed?
 		}
-        else if (lastTargetPosition == null || lastTargetPosition.getColumn() != target.getPosition().getColumn() || lastTargetPosition.getRow() != target.getPosition().getRow()) {
+        else if (lastTargetLocation == null || !lastTargetLocation.equals(target.getLocation())) {
             computePath(); // last position unknown or changed            
 		}
-        this.lastTargetPosition = new TerminalPosition(target.getPosition());
+        this.lastTargetLocation = new Location(target.getLocation());
     }
     
     private void computePath() throws UnreachableException {

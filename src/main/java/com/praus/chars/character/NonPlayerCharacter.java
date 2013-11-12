@@ -4,7 +4,7 @@
 
 package com.praus.chars.character;
 
-import com.praus.chars.character.pathfinding.MoveOrder;
+import com.praus.chars.map.MoveOrder;
 
 /**
  *

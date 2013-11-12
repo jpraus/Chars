@@ -12,6 +12,7 @@ import com.praus.chars.character.appearance.Appearance;
 import com.praus.chars.character.appearance.SingleCharAppearance;
 import com.praus.chars.character.behavior.Wanderer;
 import com.praus.chars.map.Floor;
+import com.praus.chars.map.Location;
 
 /**
  *
@@ -23,8 +24,8 @@ public class Ghoul extends AbstractNonPlayerCharacter {
 
     private Behavior behavior;
     
-    public Ghoul(Floor floor, int column, int row) {
-        super("Ghoul", 200, 0, floor, column, row);
+    public Ghoul(Floor floor, Location location) {
+        super("Ghoul", 200, 0, floor, location);
     }
 
     @Override

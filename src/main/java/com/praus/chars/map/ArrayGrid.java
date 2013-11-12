@@ -47,4 +47,12 @@ public class ArrayGrid<T extends Object> {
         }
 		tiles[column][row] = null;
 	}
+    
+    protected void clear() {
+        for (int column = 0; column < columns; column ++) {
+            for (int row = 0; row < rows; row ++) {
+                tiles[column][row] = null;
+            }
+        }
+    }
 }

@@ -2,7 +2,7 @@
  * Copyright (c) 2013 Jiri Praus
  */
 
-package com.praus.chars.character.pathfinding;
+package com.praus.chars.map;
 
 import java.util.Random;
 

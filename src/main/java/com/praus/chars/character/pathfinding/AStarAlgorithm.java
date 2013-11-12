@@ -3,6 +3,7 @@ package com.praus.chars.character.pathfinding;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.praus.chars.character.Placeable;
 import com.praus.chars.map.Floor;
+import com.praus.chars.map.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,13 +29,14 @@ class AStarAlgorithm {
 		}
 		this.floor = start.getFloor(); // map to move on
 		
-		this.startNode = new Node(start.getPosition().getColumn(), start.getPosition().getRow());
-		this.targetNode = new Node(target.getPosition().getColumn(), target.getPosition().getRow());
+		this.startNode = new Node(start.getLocation().getColumn(), start.getLocation().getRow());
+		this.targetNode = new Node(target.getLocation().getColumn(), target.getLocation().getRow());
 		
 		this.nodes = new Nodes(floor.getColumns(), floor.getRows());
 	}
 	
 	public Waypoints compute() throws UnreachableException {
+        floor.getTiles().resetColors();
 		if (startNode.getColumn() == targetNode.getColumn() && startNode.getRow() == targetNode.getRow()) {
 			return new Waypoints(); // nothing to move to
 		}
@@ -106,8 +108,9 @@ class AStarAlgorithm {
                 }
 				
 				// open reachable node and calculate parameters
-				if (!floor.isBlocked(column, row)) {					
-					int movementCost = movementCost(currentNode, column, row);
+                Location location = new Location(column, row);
+				if (!floor.isBlocked(location)) {					
+					int movementCost = movementCost(currentNode, location);
 					if (node != null) {
 						// node on that position is already opened, do not open it again
 						if (node.getG() > movementCost) {
@@ -130,7 +133,13 @@ class AStarAlgorithm {
 		return null; // path not found in this iteration
 	}
 	
-	private int movementCost(Node from, int toColumn, int toRow) {
-		return 10 + from.getG(); // TODO: dynamic movement cost according to movement type (diagonal/direct)
+	private int movementCost(Node from, Location to) {
+        int columnDiff = from.getColumn() - to.getColumn();
+        int rowDiff = from.getColumn() - to.getColumn();
+        
+        if ((columnDiff == 1 || columnDiff == -1) && (rowDiff == 1 || rowDiff == -1)) {
+            return 14 + from.getG(); // diagonal movement
+        }
+		return 10 + from.getG(); // straight movement
 	}
 }

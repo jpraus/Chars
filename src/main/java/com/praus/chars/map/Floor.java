@@ -4,7 +4,6 @@
 package com.praus.chars.map;
 
 import com.googlecode.lanterna.gui.TextGraphics;
-import com.googlecode.lanterna.terminal.TerminalPosition;
 import com.praus.chars.Globals;
 import com.praus.chars.ListenerList;
 import com.praus.chars.character.Character;
@@ -40,11 +39,11 @@ public class Floor implements PlaceableListener {
     }
     
     public final void populate() {
-        characters.add(new Zombie(this, 10, 10));
-        //characters.add(new Zombie(this, 40, 2));
-        //characters.add(new Zombie(this, 60, 18));
-        //characters.add(new Ghoul(this, 15, 8));
-        //characters.add(new Ghoul(this, 60, 16));
+        characters.add(new Zombie(this, new Location(10, 10)));
+        //characters.add(new Zombie(this, new Location(40, 2)));
+        //characters.add(new Zombie(this, new Location(60, 18)));
+        //characters.add(new Ghoul(this, new Location(15, 8)));
+        //characters.add(new Ghoul(this, new Location(60, 16)));
     }
 
     public String getTitle() {
@@ -60,17 +59,17 @@ public class Floor implements PlaceableListener {
         return tiles;
     }
 
-    public boolean isBlocked(int column, int row) {
-        if (tiles.isBlocked(column, row)) {
+    public boolean isBlocked(Location location) {
+        if (tiles.isBlocked(location.getColumn(), location.getRow())) {
             return true;
         }
         for (Character character : characters) {
-            if (character.getPosition().getColumn() == column && character.getPosition().getRow() == row) {
+            if (character.getLocation().equals(location)) {
                 return true; // monster is on spot
             }
         }
         Player player = Globals.player();
-        if (player.getPosition().getColumn() == column && player.getPosition().getRow() == row) {
+        if (player.getLocation().equals(location)) {
             return true; // cannot move on player itself
         }
         return false;
@@ -81,15 +80,15 @@ public class Floor implements PlaceableListener {
         
         // print all characters on floor
         for (Character character : characters) {
-            TerminalPosition position = character.getPosition();
-            character.getAppearance().paint(graphics, offsetColumn + position.getColumn(), offsetRow + position.getRow());
+            Location location = character.getLocation();
+            character.getAppearance().paint(graphics, offsetColumn + location.getColumn(), offsetRow + location.getRow());
         }
         
         // print player
         Player player = Globals.player();
         if (this == player.getFloor()) {
-            TerminalPosition position = player.getPosition();
-            player.getAppearance().paint(graphics, offsetColumn + position.getColumn(), offsetRow + position.getRow());
+            Location location = player.getLocation();
+            player.getAppearance().paint(graphics, offsetColumn + location.getColumn(), offsetRow + location.getRow());
         }
 
         return graphics;

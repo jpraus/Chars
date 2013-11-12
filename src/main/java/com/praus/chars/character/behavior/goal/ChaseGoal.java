@@ -6,7 +6,7 @@ package com.praus.chars.character.behavior.goal;
 
 import com.praus.chars.character.NonPlayerCharacter;
 import com.praus.chars.character.Placeable;
-import com.praus.chars.character.pathfinding.MoveOrder;
+import com.praus.chars.map.MoveOrder;
 import com.praus.chars.character.pathfinding.Path;
 import com.praus.chars.character.pathfinding.UnreachableException;
 import java.util.logging.Level;
@@ -34,6 +34,9 @@ public class ChaseGoal implements Goal {
     }
 
     public void perform() {
+        if (npc.getLocation().isNextTo(target.getLocation())) {
+            return; // nothing to do if we are next to target
+        }
         if (npc.getFatigue().canMove()) {
             try {
                 MoveOrder next = path.nextMove();

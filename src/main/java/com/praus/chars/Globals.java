@@ -6,6 +6,7 @@ package com.praus.chars;
 import com.praus.chars.character.player.Player;
 import com.praus.chars.clock.RoundClock;
 import com.praus.chars.map.Floor;
+import com.praus.chars.map.Location;
 
 /**
  * Game container, singleton instance
@@ -25,7 +26,7 @@ public class Globals {
         // player
         Floor floor = new Floor(21, 65);
         floor.populate();
-        player = new Player(floor, 2, 2);
+        player = new Player(floor, new Location(2, 2));
     }
     
     public static Player player() {

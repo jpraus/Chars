@@ -6,14 +6,13 @@ package com.praus.chars.character.monster;
 
 import com.googlecode.lanterna.terminal.ACS;
 import com.googlecode.lanterna.terminal.Terminal;
-import com.praus.chars.Being;
 import com.praus.chars.character.behavior.Behavior;
 import com.praus.chars.character.AbstractNonPlayerCharacter;
 import com.praus.chars.character.appearance.Appearance;
 import com.praus.chars.character.appearance.SingleCharAppearance;
 import com.praus.chars.character.behavior.Chaser;
-import com.praus.chars.character.behavior.Wanderer;
 import com.praus.chars.map.Floor;
+import com.praus.chars.map.Location;
 
 /**
  *
@@ -25,8 +24,8 @@ public class Zombie extends AbstractNonPlayerCharacter {
     
     private Behavior behavior;
     
-    public Zombie(Floor floor, int column, int row) {
-        super("Zombie", 100, 0, floor, column, row);
+    public Zombie(Floor floor, Location location) {
+        super("Zombie", 100, 0, floor, location);
     }
 
     @Override

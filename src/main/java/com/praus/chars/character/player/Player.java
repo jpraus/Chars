@@ -11,6 +11,7 @@ import com.praus.chars.character.AbstractCharacter;
 import com.praus.chars.character.appearance.Appearance;
 import com.praus.chars.character.appearance.SingleCharAppearance;
 import com.praus.chars.map.Floor;
+import com.praus.chars.map.Location;
 
 /**
  *
@@ -20,8 +21,8 @@ public class Player extends AbstractCharacter {
 
     private final PlayerAppearance appearance;
     
-    public Player(Floor floor, int column, int row) {
-        super("Player", 1500, 1000, floor, column, row);
+    public Player(Floor floor, Location location) {
+        super("Player", 1500, 1000, floor, location);
 
         this.appearance = new PlayerAppearance();
     }

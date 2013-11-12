@@ -8,7 +8,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalPosition;
 import com.googlecode.lanterna.terminal.TerminalSize;
 import com.praus.chars.Globals;
-import com.praus.chars.character.pathfinding.MoveOrder;
+import com.praus.chars.map.MoveOrder;
 import com.praus.chars.map.Floor;
 import com.praus.chars.map.FloorListener;
 import org.slf4j.Logger;

@@ -41,6 +41,12 @@ public class Tiles extends ArrayGrid<Tile> {
 		colorOverride.set(column, row, color);
 	}
     
+    // TODO: create something more general and cleaner maybe ?
+    @Deprecated
+    public void resetColors() {
+        colorOverride.clear();
+    }
+    
     public TextGraphics repaint(int offsetColumn, int offsetRow, TextGraphics graphics) {
         // fill map with background
         Tile defaultTile = getDefaultBackground();
