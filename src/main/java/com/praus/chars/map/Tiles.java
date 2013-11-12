@@ -7,10 +7,10 @@ import com.googlecode.lanterna.terminal.Terminal.Color;
  *
  * @author Jiří Praus <jpraus@kerio.com>
  */
-public class Tiles extends Container<Tile> {  
+public class Tiles extends ArrayGrid<Tile> {  
 
-    public Tiles(int rows, int columns) {
-        super(rows, columns);
+    public Tiles(int columns, int rows) {
+        super(columns, rows);
 
         // basic dungeon
         for (int column = 0; column < columns; column ++) {
@@ -18,6 +18,9 @@ public class Tiles extends Container<Tile> {
                 if (column == 0 || row == 0 || column == columns - 1 || row == rows - 1) {
                     set(column, row, Tile.CAVE_WALL);
                 }
+				else if ((int)(Math.random() * 5) == 0) {
+					set(column, row, Tile.CAVE_WALL); // random cave pattern
+				}
                 else {
                     set(column, row, Tile.CAVE_FLOOR);
                 }
@@ -28,6 +31,15 @@ public class Tiles extends Container<Tile> {
     public Tile getDefaultBackground() {
         return Tile.CAVE_WALL;
     }
+	
+	// TODO: create something more general and cleaner maybe ?
+	private final ArrayGrid<Color> colorOverride = new ArrayGrid<Color>(getWidth(), getHeight());
+	
+	// TODO: create something more general and cleaner maybe ?
+	@Deprecated
+	public void setColor(int column, int row, Color color) {
+		colorOverride.set(column, row, color);
+	}
     
     public TextGraphics repaint(int offsetColumn, int offsetRow, TextGraphics graphics) {
         // fill map with background
@@ -42,7 +54,7 @@ public class Tiles extends Container<Tile> {
                 Tile tile = get(column, row);
                 if (tile != null) {
                     graphics.setBackgroundColor(tile.getBackground());
-                    graphics.setForegroundColor(tile.getColor());
+					graphics.setForegroundColor(colorOverride.get(column, row) != null ? colorOverride.get(column, row) : tile.getColor());
                     graphics.drawString(column, row, tile.getCharacter() + "");
                 }
             }

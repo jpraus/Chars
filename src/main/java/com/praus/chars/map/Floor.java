@@ -22,19 +22,19 @@ import com.praus.chars.character.player.Player;
 public class Floor implements PlaceableListener {
 
     private final ListenerList<FloorListener> listeners = new ListenerList<FloorListener>();
-
-    private final int rows;
+    
     private final int columns;
+	private final int rows;
 
     private final Tiles tiles;
     private final Characters characters;
 
     public Floor(int rows, int columns) {
-        this.rows = rows;
-        this.columns = columns;
+		this.columns = columns;
+        this.rows = rows;        
 
         // map
-        this.tiles = new Tiles(rows, columns);
+        this.tiles = new Tiles(columns, rows);
 
         // monsters
         this.characters = new Characters();
@@ -45,7 +45,7 @@ public class Floor implements PlaceableListener {
         characters.add(new Zombie(this, 40, 2));
         characters.add(new Zombie(this, 60, 18));
         characters.add(new Ghoul(this, 15, 8));
-        characters.add(new Ghoul(this, 60, 2));
+        characters.add(new Ghoul(this, 60, 16));
     }
 
     public String getTitle() {
@@ -91,6 +91,14 @@ public class Floor implements PlaceableListener {
 
         return graphics;
     }
+
+	public int getColumns() {
+		return columns;
+	}
+
+	public int getRows() {
+		return rows;
+	}
     
     public ListenerList<FloorListener> listener() {
         return listeners;
