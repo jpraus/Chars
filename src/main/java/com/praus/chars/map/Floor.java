@@ -70,6 +70,10 @@ public class Floor implements PlaceableListener {
                 return true; // monster is on spot
             }
         }
+        Player player = Globals.player();
+        if (player.getPosition().getColumn() == column && player.getPosition().getRow() == row) {
+            return false; // cannot move on player itself
+        }
         return false;
     }
 

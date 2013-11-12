@@ -25,4 +25,6 @@ public interface Behavior {
     public void onHandReady();
     
     public void onSpellReady();
+    
+    public void behave();
 }

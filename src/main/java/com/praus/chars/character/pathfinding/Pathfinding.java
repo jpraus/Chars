@@ -16,8 +16,7 @@ class Pathfinding {
 	
 	private static final Logger logger = LoggerFactory.getLogger(Pathfinding.class);
 	
-	private final NearestNodes openedNodes;
-	private final Nodes closedNodes;
+	private final Nodes nodes;
 	
 	private final Floor floor;
 	
@@ -33,8 +32,7 @@ class Pathfinding {
 		this.startNode = new Node(start.getPosition().getColumn(), start.getPosition().getRow());
 		this.targetNode = new Node(target.getPosition().getColumn(), target.getPosition().getRow());
 		
-		this.openedNodes = new NearestNodes(floor.getColumns(), floor.getRows());
-		this.closedNodes = new Nodes(floor.getColumns(), floor.getRows());
+		this.nodes = new Nodes(floor.getColumns(), floor.getRows());
 	}
 	
 	public void compute() {
@@ -61,16 +59,15 @@ class Pathfinding {
 	
 	private Node findPath() {
 		// start
-		openedNodes.add(startNode);
+		nodes.add(startNode);
 		Node currentNode, finishNode;
 
 		// run iteration until finish is found or not reachable
 		int i = 0;
-		while ((currentNode = openedNodes.poll()) != null) {	
+		while ((currentNode = nodes.pollBestNodeAndClose()) != null) {	
 			if (currentNode == null) {
 				break; // not reachable, TODO exception
 			}
-			closedNodes.add(currentNode);
 			i ++;
 
 			finishNode = nextStep(currentNode);			
@@ -95,15 +92,14 @@ class Pathfinding {
 				column = currentNode.getColumn() + columnIt;
 				row = currentNode.getRow()+ rowIt;
 				
-				if (closedNodes.find(column, row) != null) {
-					continue;  // already an closed node, do not change it
-				}
+                Node node = nodes.find(column, row);
+                if (node != null && node.isClosed()) {
+                    continue;  // already an closed node, do not change it
+                }
 				
 				// open reachable node and calculate parameters
 				if (!floor.isBlocked(column, row)) {					
 					int movementCost = movementCost(currentNode, column, row);
-					
-					Node node = openedNodes.find(column, row);
 					if (node != null) {
 						// node on that position is already opened, do not open it again
 						if (node.getG() > movementCost) {
@@ -116,7 +112,7 @@ class Pathfinding {
 						node = new Node(column, row, targetNode);
 						node.setParent(currentNode);
 						node.setG(movementCost(node));
-						openedNodes.add(node);
+						nodes.add(node);
 					}
 					if (node.getColumn() == targetNode.getColumn() && node.getRow() == targetNode.getRow()) {						
 						return node; // path found, return finish node

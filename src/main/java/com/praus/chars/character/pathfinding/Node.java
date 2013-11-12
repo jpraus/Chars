@@ -13,6 +13,7 @@ class Node implements Comparable<Node> {
 	private int g = 0; // movement cost
 	
 	private Node parent = null; // path parent
+    private boolean closed = false; // indicate that this node has been closed
 
 	/**
 	 * Create new A* alogirthm node with empty heuristic
@@ -68,6 +69,14 @@ class Node implements Comparable<Node> {
 	public int getRow() {
 		return row;
 	}
+
+    public boolean isClosed() {
+        return closed;
+    }
+    
+    public void closeNode() {
+        this.closed = true;
+    }
 
 	@Override
 	public String toString() {

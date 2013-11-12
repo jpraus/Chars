@@ -11,6 +11,8 @@ import com.praus.chars.character.behavior.Behavior;
 import com.praus.chars.character.AbstractNonPlayerCharacter;
 import com.praus.chars.character.appearance.Appearance;
 import com.praus.chars.character.appearance.SingleCharAppearance;
+import com.praus.chars.character.behavior.Chaser;
+import com.praus.chars.character.behavior.Wanderer;
 import com.praus.chars.map.Floor;
 
 /**
@@ -18,9 +20,10 @@ import com.praus.chars.map.Floor;
  * @author Jiří Praus <jpraus@kerio.com>
  */
 public class Zombie extends AbstractNonPlayerCharacter {
-    
-    private final Behavior behavior = new ZombieBehavior();
+
     private final Appearance appearance = new ZombieAppearance();
+    
+    private Behavior behavior;
     
     public Zombie(Floor floor, int column, int row) {
         super("Zombie", 100, 0, floor, column, row);
@@ -33,36 +36,16 @@ public class Zombie extends AbstractNonPlayerCharacter {
 
     @Override
     protected void behave() {
-        tryMove((int)(Math.random() * 3) - 1, (int)(Math.random() * 3) - 1);
+        if (behavior == null) {
+            behavior = new Chaser(this);
+        }
+        behavior.behave();
     }
     
     @Override
     protected int getMovement() {
         return 5;
     }
-    
-    private class ZombieBehavior implements Behavior {
-        public void onTargeted(Being source) {
-        }
-
-        public void onHit(Being source) {
-        }
-
-        public void onSight(Being target) {
-        }
-
-        public void onSightLose(Being target) {
-        }
-
-        public void onMovementReady() {
-        }
-
-        public void onHandReady() {
-        }
-
-        public void onSpellReady() {
-        }
-    };
     
     private class ZombieAppearance extends SingleCharAppearance {
         public ZombieAppearance() {

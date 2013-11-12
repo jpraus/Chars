@@ -23,7 +23,9 @@ public class WanderAroundGoal implements Goal {
     }
 
     public void perform() {
-        npc.tryMove((int)(Math.random() * 3) - 1, (int)(Math.random() * 3) - 1);
+        if (npc.getFatigue().canMove()) {
+            npc.tryMove((int)(Math.random() * 3) - 1, (int)(Math.random() * 3) - 1);
+        }
     }
     
 }
