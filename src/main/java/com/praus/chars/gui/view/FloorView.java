@@ -8,6 +8,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalPosition;
 import com.googlecode.lanterna.terminal.TerminalSize;
 import com.praus.chars.Globals;
+import com.praus.chars.character.pathfinding.MoveOrder;
 import com.praus.chars.map.Floor;
 import com.praus.chars.map.FloorListener;
 import org.slf4j.Logger;
@@ -25,25 +26,25 @@ public class FloorView extends AbstractInteractableComponent implements FloorLis
         Globals.player().getFloor().listener().registerListener(this); // TODO: no a good place
     }
     
-    public void playerMove(int columns, int rows) {
-        logger.debug("Move: rows={}, columns={}", rows, columns);
-        Globals.player().tryMove(columns, rows);        
+    public void playerMove(MoveOrder move) {
+        logger.debug("Move order {}", move);
+        Globals.player().tryMove(move);        
     }
 
     @Override
     public Result keyboardInteraction(Key key) {
         switch(key.getKind()) {
             case ArrowDown:
-                playerMove(0, 1);
+                playerMove(MoveOrder.DOWN);
                 return Result.EVENT_HANDLED;
             case ArrowUp:
-                playerMove(0, -1);
+                playerMove(MoveOrder.UP);
                 return Result.EVENT_HANDLED;
             case ArrowRight:
-                playerMove(1, 0);
+                playerMove(MoveOrder.RIGHT);
                 return Result.EVENT_HANDLED;
             case ArrowLeft:
-                playerMove(-1, 0);
+                playerMove(MoveOrder.LEFT);
                 return Result.EVENT_HANDLED;
         }
         return Result.EVENT_NOT_HANDLED;

@@ -6,6 +6,7 @@ package com.praus.chars.character;
 
 import com.googlecode.lanterna.terminal.TerminalPosition;
 import com.praus.chars.ListenerList;
+import com.praus.chars.character.pathfinding.MoveOrder;
 import com.praus.chars.map.Floor;
 
 /**
@@ -67,9 +68,9 @@ public abstract class AbstractCharacter implements Character {
         return mana;
     }
     
-    public boolean tryMove(int columnChange, int rowChange) {
-        int column = getPosition().getColumn() + columnChange;
-        int row = getPosition().getRow()+ rowChange;
+    public boolean tryMove(MoveOrder order) {
+        int column = getPosition().getColumn() + order.getColumn();
+        int row = getPosition().getRow()+ order.getRow();
         
         if (getFloor().isBlocked(column, row)) {
             return false;

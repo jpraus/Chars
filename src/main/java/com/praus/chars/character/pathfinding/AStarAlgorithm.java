@@ -3,18 +3,17 @@ package com.praus.chars.character.pathfinding;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.praus.chars.character.Placeable;
 import com.praus.chars.map.Floor;
-import java.util.ArrayList;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Path A* algorithm implementation
  *
  * @author Jiří Praus <jpraus@kerio.com>
  */
-class Pathfinding {
+class AStarAlgorithm {
 	
-	private static final Logger logger = LoggerFactory.getLogger(Pathfinding.class);
+	private static final Logger logger = LoggerFactory.getLogger(AStarAlgorithm.class);
 	
 	private final Nodes nodes;
 	
@@ -23,9 +22,9 @@ class Pathfinding {
 	private final Node startNode;
 	private final Node targetNode;
 
-	public Pathfinding(Placeable start, Placeable target) {
+	public AStarAlgorithm(Placeable start, Placeable target) throws UnreachableException {
 		if (start.getFloor() != target.getFloor()) {
-			// throw some error
+            throw new UnreachableException();
 		}
 		this.floor = start.getFloor(); // map to move on
 		
@@ -35,29 +34,31 @@ class Pathfinding {
 		this.nodes = new Nodes(floor.getColumns(), floor.getRows());
 	}
 	
-	public void compute() {
+	public Waypoints compute() throws UnreachableException {
 		if (startNode.getColumn() == targetNode.getColumn() && startNode.getRow() == targetNode.getRow()) {
-			// TODO: you are standing on me
+			return new Waypoints(); // nothing to move to
 		}
 		
+        // find path to target in revers order
 		Node finish = findPath();
 		if (finish != null) {
-			List<Node> path = new ArrayList<Node>();
 			Node step = finish;
-			
-			path.add(step);			
-			
-			while (step.getParent() != null) {
-				step = step.getParent();
-				path.add(step);
-				
-				floor.getTiles().setColor(step.getColumn(), step.getRow(), Terminal.Color.WHITE);
+            Waypoints path = new Waypoints();
+
+			while (step != null) {
+                path.prependWaypoint(step);								
+				floor.getTiles().setColor(step.getColumn(), step.getRow(), Terminal.Color.BLUE);
+                
+                step = step.getParent();
 			}
-			logger.warn("Path length is {}", path.size());
+
+			logger.info("Path computed {}", path);
+            return path;
 		}
+        throw new UnreachableException(); // path not found
 	}
 	
-	private Node findPath() {
+	private Node findPath() throws UnreachableException {
 		// start
 		nodes.add(startNode);
 		Node currentNode, finishNode;
@@ -66,7 +67,7 @@ class Pathfinding {
 		int i = 0;
 		while ((currentNode = nodes.pollBestNodeAndClose()) != null) {	
 			if (currentNode == null) {
-				break; // not reachable, TODO exception
+                throw new UnreachableException();
 			}
 			i ++;
 
@@ -76,11 +77,11 @@ class Pathfinding {
 				return finishNode;
 			}			
 		}
-		return null; // no reachable
+        throw new UnreachableException();
 	}
 	
 	private Node nextStep(Node currentNode) {
-		logger.debug("Pathfinding iteration");
+		floor.getTiles().setColor(currentNode.getColumn(), currentNode.getRow(), Terminal.Color.RED);
 		
 		// search nodes around current node
 		int column, row;
@@ -91,6 +92,13 @@ class Pathfinding {
 				}
 				column = currentNode.getColumn() + columnIt;
 				row = currentNode.getRow()+ rowIt;
+                
+                // test if this node is final or not
+                if (column == targetNode.getColumn() && row == targetNode.getRow()) {
+                    Node node = new Node(column, row, targetNode);
+                    node.setParent(currentNode);
+                    return node;
+                }
 				
                 Node node = nodes.find(column, row);
                 if (node != null && node.isClosed()) {
@@ -111,21 +119,15 @@ class Pathfinding {
 						// open new node
 						node = new Node(column, row, targetNode);
 						node.setParent(currentNode);
-						node.setG(movementCost(node));
+						node.setG(movementCost);
 						nodes.add(node);
-					}
-					if (node.getColumn() == targetNode.getColumn() && node.getRow() == targetNode.getRow()) {						
-						return node; // path found, return finish node
-					}
+                        
+                        floor.getTiles().setColor(node.getColumn(), node.getRow(), Terminal.Color.GREEN);
+					}					
 				}
 			}
 		}
 		return null; // path not found in this iteration
-	}
-	
-	private int movementCost(Node node) {
-		Node from = node.getParent();
-		return movementCost(from, node.getColumn(), node.getRow());
 	}
 	
 	private int movementCost(Node from, int toColumn, int toRow) {

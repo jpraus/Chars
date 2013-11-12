@@ -5,6 +5,7 @@
 package com.praus.chars.character.behavior.goal;
 
 import com.praus.chars.character.NonPlayerCharacter;
+import com.praus.chars.character.pathfinding.MoveOrder;
 
 /**
  *
@@ -24,7 +25,7 @@ public class WanderAroundGoal implements Goal {
 
     public void perform() {
         if (npc.getFatigue().canMove()) {
-            npc.tryMove((int)(Math.random() * 3) - 1, (int)(Math.random() * 3) - 1);
+            npc.tryMove(MoveOrder.random());
         }
     }
     

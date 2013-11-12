@@ -11,7 +11,6 @@ import com.praus.chars.character.Character;
 import com.praus.chars.character.Characters;
 import com.praus.chars.character.Placeable;
 import com.praus.chars.character.PlaceableListener;
-import com.praus.chars.character.monster.Ghoul;
 import com.praus.chars.character.monster.Zombie;
 import com.praus.chars.character.player.Player;
 
@@ -42,10 +41,10 @@ public class Floor implements PlaceableListener {
     
     public final void populate() {
         characters.add(new Zombie(this, 10, 10));
-        characters.add(new Zombie(this, 40, 2));
-        characters.add(new Zombie(this, 60, 18));
-        characters.add(new Ghoul(this, 15, 8));
-        characters.add(new Ghoul(this, 60, 16));
+        //characters.add(new Zombie(this, 40, 2));
+        //characters.add(new Zombie(this, 60, 18));
+        //characters.add(new Ghoul(this, 15, 8));
+        //characters.add(new Ghoul(this, 60, 16));
     }
 
     public String getTitle() {
@@ -72,7 +71,7 @@ public class Floor implements PlaceableListener {
         }
         Player player = Globals.player();
         if (player.getPosition().getColumn() == column && player.getPosition().getRow() == row) {
-            return false; // cannot move on player itself
+            return true; // cannot move on player itself
         }
         return false;
     }

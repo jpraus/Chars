@@ -5,6 +5,7 @@
 package com.praus.chars.character;
 
 import com.praus.chars.Globals;
+import com.praus.chars.character.pathfinding.MoveOrder;
 import com.praus.chars.clock.RoundClockListener;
 import com.praus.chars.map.Floor;
 
@@ -59,11 +60,11 @@ public abstract class AbstractNonPlayerCharacter extends AbstractCharacter imple
     protected abstract int getMovement();
 
     @Override
-    public boolean tryMove(int columnChange, int rowChange) {
+    public boolean tryMove(MoveOrder order) {
         if (!fatigue.canMove()) {
             return false; // TODO: or illegal call exception
         }
-        boolean moved = super.tryMove(columnChange, rowChange);
+        boolean moved = super.tryMove(order);
         if (moved) {
             fatigue.moved(getMovement());
         }

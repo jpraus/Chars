@@ -66,7 +66,7 @@ public class RoundClock {
                             for (RoundClockListener listener : listeners) {
                                 listener.onRoundTick();
                             }
-                            logger.debug("Round tick performed");
+                            //logger.debug("Round tick performed");
                         }
                     }
                 }
