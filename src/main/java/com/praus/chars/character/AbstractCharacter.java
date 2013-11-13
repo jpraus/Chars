@@ -5,6 +5,7 @@
 package com.praus.chars.character;
 
 import com.praus.chars.ListenerList;
+import com.praus.chars.character.pathfinding.PathBlockedException;
 import com.praus.chars.map.MoveOrder;
 import com.praus.chars.map.Floor;
 import com.praus.chars.map.Location;
@@ -68,15 +69,14 @@ public abstract class AbstractCharacter implements Character {
         return mana;
     }
     
-    public boolean tryMove(MoveOrder order) {
+    public void tryMove(MoveOrder order) throws PathBlockedException, FatigueException {
         Location future = getLocation().futureLocation(order);
         if (getFloor().isBlocked(future)) {
-            return false;
+			throw new PathBlockedException();
         }
         this.getLocation().changeTo(future);     
         
         this.notifyListenersMoved();
-        return true;
     }
     
     @Override

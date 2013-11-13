@@ -40,8 +40,8 @@ public class Floor implements PlaceableListener {
     
     public final void populate() {
         characters.add(new Zombie(this, new Location(10, 10)));
-        //characters.add(new Zombie(this, new Location(40, 2)));
-        //characters.add(new Zombie(this, new Location(60, 18)));
+        characters.add(new Zombie(this, new Location(40, 2)));
+        characters.add(new Zombie(this, new Location(60, 18)));
         //characters.add(new Ghoul(this, new Location(15, 8)));
         //characters.add(new Ghoul(this, new Location(60, 16)));
     }

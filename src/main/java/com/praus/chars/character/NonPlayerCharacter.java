@@ -4,6 +4,7 @@
 
 package com.praus.chars.character;
 
+import com.praus.chars.character.pathfinding.PathBlockedException;
 import com.praus.chars.map.MoveOrder;
 
 /**
@@ -14,7 +15,7 @@ public interface NonPlayerCharacter extends Character {
 
     public BodyFatigue getFatigue();
     
-    public boolean tryMove(MoveOrder order);
+	public void tryMove(MoveOrder order) throws PathBlockedException, FatigueException;
     
     public boolean isAwake();
     

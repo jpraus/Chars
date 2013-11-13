@@ -4,13 +4,14 @@
 
 package com.praus.chars.character.behavior.goal;
 
+import com.praus.chars.character.FatigueException;
 import com.praus.chars.character.NonPlayerCharacter;
 import com.praus.chars.character.Placeable;
 import com.praus.chars.map.MoveOrder;
 import com.praus.chars.character.pathfinding.Path;
+import com.praus.chars.character.pathfinding.PathBlockedException;
 import com.praus.chars.character.pathfinding.UnreachableException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.praus.chars.journal.Journal;
 
 /**
  *
@@ -35,18 +36,27 @@ public class ChaseGoal implements Goal {
 
     public void perform() {
         if (npc.getLocation().isNextTo(target.getLocation())) {
+			Journal.addItem(npc.getName() + " says: Brain!");
             return; // nothing to do if we are next to target
         }
         if (npc.getFatigue().canMove()) {
             try {
                 MoveOrder next = path.nextMove();
-                if (next.equals(MoveOrder.NO)) {
+                if (next.equals(MoveOrder.NO)) {					
                     // target reached, we can do something else instead
                 }
-                npc.tryMove(next);
+				try {
+					npc.tryMove(next);
+				} 
+				catch (PathBlockedException ex) {
+					path.reset(); // recalculate path in next round
+				} 
+				catch (FatigueException ex) {
+					// wait for next round
+				}
             }
             catch (UnreachableException ex) {
-                Logger.getLogger(ChaseGoal.class.getName()).log(Level.SEVERE, null, ex);
+                // TODO: we cannot perfom this goal
             }
         }
     }    

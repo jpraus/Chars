@@ -57,6 +57,13 @@ public class Path {
             }
         }
 	}
+	
+	/**
+	 * Reset currently calculated path and recalculate new one in next round if needed
+	 */
+	public void reset() {
+		this.path = null;
+	}
     
     private MoveOrder nextMoveInternal() throws UnreachableException, PathNotFollowedException {
         if (path == null) {

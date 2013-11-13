@@ -4,7 +4,9 @@
 
 package com.praus.chars.character.behavior.goal;
 
+import com.praus.chars.character.FatigueException;
 import com.praus.chars.character.NonPlayerCharacter;
+import com.praus.chars.character.pathfinding.PathBlockedException;
 import com.praus.chars.map.MoveOrder;
 
 /**
@@ -20,12 +22,20 @@ public class WanderAroundGoal implements Goal {
     }
     
     public boolean isPerformable() {
-        return true; // wander can always
+        return true; // TODO: if character is completely blocked it cannot perform wander around goal
     }
 
     public void perform() {
         if (npc.getFatigue().canMove()) {
-            npc.tryMove(MoveOrder.random());
+			try {
+				npc.tryMove(MoveOrder.random());
+			} 
+			catch (PathBlockedException ex) {
+				// try next in round again
+			} 
+			catch (FatigueException ex) {
+				// try next in round again
+			}
         }
     }
     

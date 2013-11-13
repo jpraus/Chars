@@ -5,6 +5,7 @@
 package com.praus.chars.character;
 
 import com.praus.chars.Globals;
+import com.praus.chars.character.pathfinding.PathBlockedException;
 import com.praus.chars.map.MoveOrder;
 import com.praus.chars.clock.RoundClockListener;
 import com.praus.chars.map.Floor;
@@ -61,14 +62,11 @@ public abstract class AbstractNonPlayerCharacter extends AbstractCharacter imple
     protected abstract int getMovement();
 
     @Override
-    public boolean tryMove(MoveOrder order) {
+    public void tryMove(MoveOrder order) throws PathBlockedException, FatigueException {
         if (!fatigue.canMove()) {
-            return false; // TODO: or illegal call exception
+            throw new FatigueException(FatigueException.Cause.MOVEMENT);
         }
-        boolean moved = super.tryMove(order);
-        if (moved) {
-            fatigue.moved(getMovement());
-        }
-        return moved;
+		super.tryMove(order);
+		fatigue.moved(getMovement());        
     }
 }

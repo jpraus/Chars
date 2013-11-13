@@ -8,9 +8,13 @@ import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.terminal.TerminalPosition;
 import com.googlecode.lanterna.terminal.TerminalSize;
 import com.praus.chars.Globals;
+import com.praus.chars.character.FatigueException;
+import com.praus.chars.character.pathfinding.PathBlockedException;
+import com.praus.chars.journal.Journal;
 import com.praus.chars.map.MoveOrder;
 import com.praus.chars.map.Floor;
 import com.praus.chars.map.FloorListener;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +32,15 @@ public class FloorView extends AbstractInteractableComponent implements FloorLis
     
     public void playerMove(MoveOrder move) {
         logger.debug("Move order {}", move);
-        Globals.player().tryMove(move);        
+		try {        
+			Globals.player().tryMove(move);
+		} 
+		catch (PathBlockedException ex) {
+			Journal.addItem("You: Auuu, that hurts!");
+		} 
+		catch (FatigueException ex) {
+			Journal.addItem("You're too tired to move");
+		}
     }
 
     @Override
