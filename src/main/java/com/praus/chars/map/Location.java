@@ -45,6 +45,10 @@ public class Location {
         this.row = location.getRow();
     }
     
+    public Location futureLocation(int columnChange, int rowChange) {
+        return new Location(column + columnChange, row + rowChange);
+    }
+    
     public Location futureLocation(MoveOrder order) {
         return new Location(column + order.getColumn(), row + order.getRow());
     }

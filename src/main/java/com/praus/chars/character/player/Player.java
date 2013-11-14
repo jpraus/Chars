@@ -8,10 +8,14 @@ import com.googlecode.lanterna.terminal.ACS;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.praus.chars.character.behavior.Behavior;
 import com.praus.chars.character.AbstractCharacter;
+import com.praus.chars.character.FatigueException;
 import com.praus.chars.character.appearance.Appearance;
 import com.praus.chars.character.appearance.SingleCharAppearance;
+import com.praus.chars.character.los.LineOfSight;
+import com.praus.chars.character.pathfinding.PathBlockedException;
 import com.praus.chars.map.Floor;
 import com.praus.chars.map.Location;
+import com.praus.chars.map.MoveOrder;
 
 /**
  *
@@ -39,5 +43,13 @@ public class Player extends AbstractCharacter {
         public PlayerAppearance() {
             super(ACS.FACE_BLACK, Terminal.Color.YELLOW, null);
         }
+    }
+
+    @Override
+    public void tryMove(MoveOrder order) throws PathBlockedException, FatigueException {
+        super.tryMove(order);
+        
+        LineOfSight los = new LineOfSight(this);
+        los.compute();        
     }
 }

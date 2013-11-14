@@ -80,4 +80,9 @@ public class Tiles extends ArrayGrid<Tile> {
         Tile tile = get(column, row);
         return tile == null || tile.getAttribute() == Tile.Attribute.WALL;
     }
+    
+    public boolean isInBounds(Location location) {
+        return location.getRow() >= 0 && location.getRow() <= getHeight() - 1 
+            && location.getColumn() >= 0 && location.getColumn() <= getWidth() - 1;
+    }
 }
